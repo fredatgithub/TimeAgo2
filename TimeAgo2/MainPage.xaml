@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TimeAgo2"
+             x:Class="TimeAgo2.MainPage"
+             Title="Mes activités"
+             BackgroundColor="#F4F7FA"
+             Loaded="OnPageLoaded">
+
+    <Grid RowDefinitions="Auto,Auto,*"
+          RowSpacing="18">
+        <Grid Grid.Row="0"
+              Padding="24,28,24,0"
+              ColumnDefinitions="*,Auto"
+              ColumnSpacing="8">
+            <VerticalStackLayout Grid.Column="0" Spacing="6">
+                <Label x:Name="HeaderTaglineLabel"
+                       Text="MON TEMPS"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       TextColor="#537A72"
+                       CharacterSpacing="1.5" />
+                <Label x:Name="HeaderTitleLabel"
+                       Text="Mes activités"
+                       FontSize="30"
+                       FontAttributes="Bold"
+                       TextColor="#182B28" />
+                <Label x:Name="HeaderSubtitleLabel"
+                       Text="Depuis combien de temps ?"
+                       FontSize="15"
+                       TextColor="#65736F" />
+            </VerticalStackLayout>
+            <Button x:Name="SettingsButton"
+                    Grid.Column="1"
+                    Text="⚙"
+                    Clicked="OnSettingsClicked"
+                    BackgroundColor="White"
+                    TextColor="#27685A"
+                    CornerRadius="14"
+                    WidthRequest="48"
+                    HeightRequest="48"
+                    VerticalOptions="Start" />
+        </Grid>
+
+        <Border Grid.Row="1"
+                Margin="20,0"
+                Padding="18"
+                BackgroundColor="White"
+                Stroke="#E5EBE9"
+                StrokeShape="RoundRectangle 20">
+            <VerticalStackLayout Spacing="14">
+                <Entry x:Name="ActivityNameEntry"
+                       Placeholder="Ex. : dernière séance de sport"
+                       ClearButtonVisibility="WhileEditing"
+                       ReturnType="Done"
+                       MaxLength="100"
+                       TextColor="#182B28"
+                       PlaceholderColor="#899591" />
+
+                <Grid ColumnDefinitions="*,*"
+                      ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="5">
+                        <Label x:Name="DateLabel"
+                               Text="DATE"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#65736F"
+                               CharacterSpacing="1" />
+                        <DatePicker x:Name="ActivityDatePicker"
+                                    Format="ddd d MMM yyyy"
+                                    TextColor="#182B28" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1" Spacing="5">
+                        <Label x:Name="TimeLabel"
+                               Text="HEURE"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#65736F"
+                               CharacterSpacing="1" />
+                        <TimePicker x:Name="ActivityTimePicker"
+                                    Format="HH:mm"
+                                    TextColor="#182B28" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Button x:Name="AddActivityButton"
+                        Text="Ajouter l’activité"
+                        Clicked="OnAddActivityClicked"
+                        BackgroundColor="#27685A"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="14"
+                        HeightRequest="50" />
+            </VerticalStackLayout>
+        </Border>
+
+        <CollectionView x:Name="ActivitiesView"
+                        Grid.Row="2"
+                        Margin="20,0,20,20"
+                        SelectionMode="None">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Padding="16,36"
+                                     Spacing="8"
+                                     HorizontalOptions="Center">
+                    <Label x:Name="EmptyTitleLabel"
+                           Text="Aucune activité pour le moment"
+                           FontSize="17"
+                           FontAttributes="Bold"
+                           TextColor="#46534F"
+                           HorizontalTextAlignment="Center" />
+                    <Label x:Name="EmptySubtitleLabel"
+                           Text="Ajoutez-en une ci-dessus pour commencer."
+                           FontSize="14"
+                           TextColor="#78847F"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="local:ActivityRecord">
+                    <Border Margin="0,0,0,10"
+                            Padding="16"
+                            BackgroundColor="White"
+                            Stroke="#E5EBE9"
+                            StrokeShape="RoundRectangle 18">
+                        <Grid ColumnDefinitions="*,Auto"
+                              RowDefinitions="Auto,Auto,Auto"
+                              ColumnSpacing="10"
+                              RowSpacing="5">
+                            <Label Grid.Row="0"
+                                   Grid.Column="0"
+                                   Text="{Binding Name}"
+                                   FontSize="17"
+                                   FontAttributes="Bold"
+                                   TextColor="#182B28"
+                                   LineBreakMode="TailTruncation" />
+                            <Label Grid.Row="1"
+                                   Grid.Column="0"
+                                   Text="{Binding ElapsedText}"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#27685A" />
+                            <Label Grid.Row="2"
+                                   Grid.Column="0"
+                                   Text="{Binding CreatedAtText}"
+                                   FontSize="13"
+                                   TextColor="#78847F" />
+                            <Button Grid.Row="0"
+                                    Grid.RowSpan="3"
+                                    Grid.Column="1"
+                                    Text="{Binding DeleteText}"
+                                    CommandParameter="{Binding .}"
+                                    Clicked="OnDeleteActivityClicked"
+                                    BackgroundColor="#FCEDEB"
+                                    TextColor="#A13F34"
+                                    FontSize="12"
+                                    Padding="10,0"
+                                    CornerRadius="12"
+                                    VerticalOptions="Center"
+                                    HeightRequest="40" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
