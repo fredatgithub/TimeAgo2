@@ -3,44 +3,43 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TimeAgo2.SettingsPage"
              Title="Paramètres"
-             BackgroundColor="#F4F7FA">
+             BackgroundColor="White">
     <VerticalStackLayout Padding="24,28"
                          Spacing="20">
         <VerticalStackLayout Spacing="6">
             <Label x:Name="PageTitleLabel"
                    Text="Paramètres"
-                   FontSize="30"
-                   FontAttributes="Bold"
-                   TextColor="#182B28" />
+                   FontSize="28"
+                   TextColor="#212121" />
             <Label x:Name="PageSubtitleLabel"
                    Text="Choisissez la langue de l’application."
                    FontSize="15"
-                   TextColor="#65736F" />
+                   TextColor="#757575" />
         </VerticalStackLayout>
 
         <Border Padding="18"
-                BackgroundColor="White"
-                Stroke="#E5EBE9"
-                StrokeShape="RoundRectangle 20">
+                BackgroundColor="#FAFAFA"
+                Stroke="#EEEEEE"
+                StrokeShape="RoundRectangle 16">
             <VerticalStackLayout Spacing="10">
                 <Label x:Name="LanguageLabel"
                        Text="Langue"
                        FontSize="14"
                        FontAttributes="Bold"
-                       TextColor="#46534F" />
+                       TextColor="#424242" />
                 <Picker x:Name="LanguagePicker"
                         Title="Langue"
-                        TextColor="#182B28" />
+                        TextColor="#212121" />
             </VerticalStackLayout>
         </Border>
 
         <Button x:Name="SaveButton"
                 Text="Enregistrer"
                 Clicked="OnSaveClicked"
-                BackgroundColor="#27685A"
+                BackgroundColor="#FF5722"
                 TextColor="White"
                 FontAttributes="Bold"
-                CornerRadius="14"
+                CornerRadius="26"
                 HeightRequest="50" />
     </VerticalStackLayout>
 </ContentPage>

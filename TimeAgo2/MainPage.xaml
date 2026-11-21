@@ -3,164 +3,251 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:TimeAgo2"
              x:Class="TimeAgo2.MainPage"
-             Title="Mes activités"
-             BackgroundColor="#F4F7FA"
+             Title="Événements"
+             BackgroundColor="White"
              Loaded="OnPageLoaded">
 
-    <Grid RowDefinitions="Auto,Auto,*"
-          RowSpacing="18">
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
         <Grid Grid.Row="0"
-              Padding="24,28,24,0"
-              ColumnDefinitions="*,Auto"
-              ColumnSpacing="8">
-            <VerticalStackLayout Grid.Column="0" Spacing="6">
+              Padding="20,24,20,12"
+              ColumnDefinitions="Auto,*,Auto"
+              ColumnSpacing="10">
+            <Button x:Name="BackButton"
+                    Grid.Column="0"
+                    Text="‹"
+                    Clicked="OnBackClicked"
+                    IsVisible="False"
+                    BackgroundColor="Transparent"
+                    TextColor="#424242"
+                    FontSize="32"
+                    Padding="0"
+                    WidthRequest="40"
+                    HeightRequest="44"
+                    VerticalOptions="Start" />
+            <VerticalStackLayout x:Name="HeaderContent"
+                                 Grid.Column="1"
+                                 Spacing="4">
                 <Label x:Name="HeaderTaglineLabel"
                        Text="MON TEMPS"
-                       FontSize="13"
+                       FontSize="12"
                        FontAttributes="Bold"
-                       TextColor="#537A72"
-                       CharacterSpacing="1.5" />
+                       TextColor="#757575"
+                       CharacterSpacing="1.2" />
                 <Label x:Name="HeaderTitleLabel"
-                       Text="Mes activités"
-                       FontSize="30"
-                       FontAttributes="Bold"
-                       TextColor="#182B28" />
+                       Text="Événements"
+                       FontSize="28"
+                       TextColor="#212121"
+                       LineBreakMode="TailTruncation" />
                 <Label x:Name="HeaderSubtitleLabel"
                        Text="Depuis combien de temps ?"
-                       FontSize="15"
-                       TextColor="#65736F" />
+                       FontSize="14"
+                       TextColor="#757575" />
             </VerticalStackLayout>
             <Button x:Name="SettingsButton"
-                    Grid.Column="1"
+                    Grid.Column="2"
                     Text="⚙"
                     Clicked="OnSettingsClicked"
-                    BackgroundColor="White"
-                    TextColor="#27685A"
-                    CornerRadius="14"
+                    BackgroundColor="Transparent"
+                    TextColor="#616161"
+                    CornerRadius="24"
+                    FontSize="25"
+                    Padding="0"
                     WidthRequest="48"
                     HeightRequest="48"
                     VerticalOptions="Start" />
+            <Button x:Name="DeleteEventButton"
+                    Grid.Column="2"
+                    Text="×"
+                    Clicked="OnDeleteEventClicked"
+                    IsVisible="False"
+                    BackgroundColor="Transparent"
+                    TextColor="#757575"
+                    FontSize="30"
+                    Padding="0"
+                    WidthRequest="44"
+                    HeightRequest="44"
+                    VerticalOptions="Start" />
         </Grid>
 
-        <Border Grid.Row="1"
-                Margin="20,0"
-                Padding="18"
-                BackgroundColor="White"
-                Stroke="#E5EBE9"
-                StrokeShape="RoundRectangle 20">
-            <VerticalStackLayout Spacing="14">
+        <Border x:Name="AddEventForm"
+                Grid.Row="1"
+                Margin="20,0,20,12"
+                Padding="16"
+                IsVisible="False"
+                BackgroundColor="#FAFAFA"
+                Stroke="#EEEEEE"
+                StrokeShape="RoundRectangle 16">
+            <VerticalStackLayout Spacing="12">
                 <Entry x:Name="ActivityNameEntry"
-                       Placeholder="Ex. : dernière séance de sport"
+                       Placeholder="Nom de l’événement"
                        ClearButtonVisibility="WhileEditing"
                        ReturnType="Done"
                        MaxLength="100"
-                       TextColor="#182B28"
-                       PlaceholderColor="#899591" />
+                       TextColor="#212121"
+                       PlaceholderColor="#9E9E9E" />
 
                 <Grid ColumnDefinitions="*,*"
                       ColumnSpacing="12">
-                    <VerticalStackLayout Grid.Column="0" Spacing="5">
+                    <VerticalStackLayout Grid.Column="0" Spacing="4">
                         <Label x:Name="DateLabel"
                                Text="DATE"
                                FontSize="11"
                                FontAttributes="Bold"
-                               TextColor="#65736F"
-                               CharacterSpacing="1" />
+                               TextColor="#757575" />
                         <DatePicker x:Name="ActivityDatePicker"
                                     Format="ddd d MMM yyyy"
-                                    TextColor="#182B28" />
+                                    TextColor="#424242" />
                     </VerticalStackLayout>
-                    <VerticalStackLayout Grid.Column="1" Spacing="5">
+                    <VerticalStackLayout Grid.Column="1" Spacing="4">
                         <Label x:Name="TimeLabel"
                                Text="HEURE"
                                FontSize="11"
                                FontAttributes="Bold"
-                               TextColor="#65736F"
-                               CharacterSpacing="1" />
+                               TextColor="#757575" />
                         <TimePicker x:Name="ActivityTimePicker"
                                     Format="HH:mm"
-                                    TextColor="#182B28" />
+                                    TextColor="#424242" />
                     </VerticalStackLayout>
                 </Grid>
 
-                <Button x:Name="AddActivityButton"
-                        Text="Ajouter l’activité"
-                        Clicked="OnAddActivityClicked"
-                        BackgroundColor="#27685A"
-                        TextColor="White"
-                        FontAttributes="Bold"
-                        CornerRadius="14"
-                        HeightRequest="50" />
+                <Grid ColumnDefinitions="*,*"
+                      ColumnSpacing="10">
+                    <Button x:Name="SaveEventButton"
+                            Grid.Column="0"
+                            Text="Créer l’événement"
+                            Clicked="OnCreateEventClicked"
+                            BackgroundColor="#FF5722"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="22"
+                            HeightRequest="44" />
+                    <Button x:Name="CancelAddEventButton"
+                            Grid.Column="1"
+                            Text="Annuler"
+                            Clicked="OnCancelAddEventClicked"
+                            BackgroundColor="#EEEEEE"
+                            TextColor="#424242"
+                            CornerRadius="22"
+                            HeightRequest="44" />
+                </Grid>
             </VerticalStackLayout>
         </Border>
 
-        <CollectionView x:Name="ActivitiesView"
+        <CollectionView x:Name="EventsView"
                         Grid.Row="2"
-                        Margin="20,0,20,20"
+                        Margin="12,0"
                         SelectionMode="None">
             <CollectionView.EmptyView>
-                <VerticalStackLayout Padding="16,36"
+                <VerticalStackLayout Padding="20,48"
                                      Spacing="8"
                                      HorizontalOptions="Center">
                     <Label x:Name="EmptyTitleLabel"
-                           Text="Aucune activité pour le moment"
+                           Text="Aucun événement pour le moment"
                            FontSize="17"
-                           FontAttributes="Bold"
-                           TextColor="#46534F"
+                           TextColor="#424242"
                            HorizontalTextAlignment="Center" />
                     <Label x:Name="EmptySubtitleLabel"
-                           Text="Ajoutez-en une ci-dessus pour commencer."
+                           Text="Ajoutez un événement pour commencer."
                            FontSize="14"
-                           TextColor="#78847F"
+                           TextColor="#757575"
                            HorizontalTextAlignment="Center" />
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="local:ActivityRecord">
-                    <Border Margin="0,0,0,10"
-                            Padding="16"
-                            BackgroundColor="White"
-                            Stroke="#E5EBE9"
-                            StrokeShape="RoundRectangle 18">
-                        <Grid ColumnDefinitions="*,Auto"
-                              RowDefinitions="Auto,Auto,Auto"
-                              ColumnSpacing="10"
-                              RowSpacing="5">
-                            <Label Grid.Row="0"
-                                   Grid.Column="0"
-                                   Text="{Binding Name}"
-                                   FontSize="17"
-                                   FontAttributes="Bold"
-                                   TextColor="#182B28"
-                                   LineBreakMode="TailTruncation" />
-                            <Label Grid.Row="1"
-                                   Grid.Column="0"
-                                   Text="{Binding ElapsedText}"
-                                   FontSize="16"
-                                   FontAttributes="Bold"
-                                   TextColor="#27685A" />
-                            <Label Grid.Row="2"
-                                   Grid.Column="0"
-                                   Text="{Binding CreatedAtText}"
-                                   FontSize="13"
-                                   TextColor="#78847F" />
-                            <Button Grid.Row="0"
-                                    Grid.RowSpan="3"
-                                    Grid.Column="1"
-                                    Text="{Binding DeleteText}"
+                <DataTemplate x:DataType="local:ActivityEvent">
+                    <VerticalStackLayout Spacing="0">
+                        <Grid Padding="12,14"
+                              ColumnDefinitions="*,Auto"
+                              ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="4"
+                                                 VerticalOptions="Center">
+                                <VerticalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnEventTapped"
+                                                          CommandParameter="{Binding .}" />
+                                </VerticalStackLayout.GestureRecognizers>
+                                <Label Text="{Binding Name}"
+                                       FontSize="17"
+                                       TextColor="#212121"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding ElapsedText}"
+                                       FontSize="14"
+                                       TextColor="#757575" />
+                            </VerticalStackLayout>
+                            <Button Grid.Column="1"
+                                    Text="+"
+                                    SemanticProperties.Description="{Binding AddInstanceText}"
                                     CommandParameter="{Binding .}"
-                                    Clicked="OnDeleteActivityClicked"
-                                    BackgroundColor="#FCEDEB"
-                                    TextColor="#A13F34"
-                                    FontSize="12"
-                                    Padding="10,0"
-                                    CornerRadius="12"
-                                    VerticalOptions="Center"
-                                    HeightRequest="40" />
+                                    Clicked="OnAddInstanceClicked"
+                                    BackgroundColor="Transparent"
+                                    BorderColor="#8A8A8A"
+                                    BorderWidth="1.5"
+                                    TextColor="#616161"
+                                    FontSize="24"
+                                    Padding="0"
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    CornerRadius="20"
+                                    VerticalOptions="Center" />
                         </Grid>
-                    </Border>
+                        <BoxView HeightRequest="1"
+                                 BackgroundColor="#EEEEEE" />
+                    </VerticalStackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <CollectionView x:Name="InstancesView"
+                        Grid.Row="2"
+                        Margin="16,0"
+                        IsVisible="False"
+                        SelectionMode="None">
+            <CollectionView.EmptyView>
+                <Label x:Name="EmptyInstancesLabel"
+                       Text="Aucune occurrence"
+                       Padding="20,40"
+                       FontSize="15"
+                       TextColor="#757575"
+                       HorizontalTextAlignment="Center" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="local:ActivityInstance">
+                    <Grid Padding="10,14"
+                          ColumnDefinitions="*,Auto"
+                          ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="4"
+                                             VerticalOptions="Center">
+                            <Label Text="{Binding ElapsedText}"
+                                   FontSize="16"
+                                   TextColor="#212121" />
+                            <Label Text="{Binding CreatedAtText}"
+                                   FontSize="13"
+                                   TextColor="#757575" />
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1"
+                                Text="{Binding DeleteText}"
+                                CommandParameter="{Binding .}"
+                                Clicked="OnDeleteInstanceClicked"
+                                BackgroundColor="Transparent"
+                                TextColor="#757575"
+                                FontSize="12"
+                                Padding="8,0"
+                                HeightRequest="38" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button x:Name="MainActionButton"
+                Grid.Row="3"
+                Margin="20,8,20,20"
+                Text="+ Ajouter un événement"
+                Clicked="OnMainActionClicked"
+                BackgroundColor="#FF5722"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="28"
+                HeightRequest="52" />
     </Grid>
 </ContentPage>
