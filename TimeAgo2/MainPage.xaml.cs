@@ -25,6 +25,8 @@ public partial class MainPage : ContentPage
         EventsView.ItemsSource = _events;
         ActivityDatePicker.MaximumDate = DateTime.Today;
         ActivityTimePicker.Time = DateTime.Now.TimeOfDay;
+        InstanceDatePicker.MaximumDate = DateTime.Today;
+        InstanceTimePicker.Time = DateTime.Now.TimeOfDay;
 
         var timer = Dispatcher.CreateTimer();
         timer.Interval = TimeSpan.FromSeconds(1);
@@ -53,7 +55,12 @@ public partial class MainPage : ContentPage
     {
         if (_selectedEvent is not null)
         {
-            await AddInstanceAsync(_selectedEvent, DateTimeOffset.Now);
+            InstanceNoteEntry.Text = string.Empty;
+            InstanceDatePicker.Date = DateTime.Today;
+            InstanceTimePicker.Time = DateTime.Now.TimeOfDay;
+            AddInstanceForm.IsVisible = true;
+            MainActionButton.IsVisible = false;
+            InstanceNoteEntry.Focus();
             return;
         }
 
@@ -61,6 +68,7 @@ public partial class MainPage : ContentPage
         ActivityDatePicker.Date = DateTime.Today;
         ActivityTimePicker.Time = DateTime.Now.TimeOfDay;
         AddEventForm.IsVisible = true;
+        AddInstanceForm.IsVisible = false;
         MainActionButton.IsVisible = false;
         ActivityNameEntry.Focus();
     }
@@ -106,13 +114,47 @@ public partial class MainPage : ContentPage
         MainActionButton.IsVisible = true;
     }
 
+    private async void OnSaveInstanceClicked(object? sender, EventArgs e)
+    {
+        if (_selectedEvent is not { } activityEvent)
+        {
+            return;
+        }
+
+        var localDateTime = InstanceDatePicker.Date.Date + InstanceTimePicker.Time;
+        if (localDateTime > DateTime.Now)
+        {
+            await DisplayAlert(
+                Localization.Get("invalid_date_title"),
+                Localization.Get("invalid_date_message"),
+                Localization.Get("ok"));
+            return;
+        }
+
+        var note = InstanceNoteEntry.Text?.Trim() ?? string.Empty;
+        if (!await AddInstanceAsync(activityEvent, new DateTimeOffset(localDateTime), note))
+        {
+            return;
+        }
+
+        InstanceNoteEntry.Text = string.Empty;
+        AddInstanceForm.IsVisible = false;
+        MainActionButton.IsVisible = true;
+    }
+
+    private void OnCancelAddInstanceClicked(object? sender, EventArgs e)
+    {
+        AddInstanceForm.IsVisible = false;
+        MainActionButton.IsVisible = true;
+    }
+
     private async Task<bool> CreateEventOrAddInstanceAsync(string name, DateTimeOffset createdAt)
     {
         var existingEvent = _events.FirstOrDefault(activity =>
             string.Equals(activity.Name.Trim(), name, StringComparison.OrdinalIgnoreCase));
         if (existingEvent is not null)
         {
-            if (!await AddInstanceAsync(existingEvent, createdAt))
+            if (!await AddInstanceAsync(existingEvent, createdAt, string.Empty))
             {
                 return false;
             }
@@ -129,7 +171,7 @@ public partial class MainPage : ContentPage
                 new ActivityInstance { CreatedAt = createdAt }
             ]
         };
-        activityEvent.UpdateDisplay(DateTimeOffset.Now);
+        activityEvent.UpdateTimeline(DateTimeOffset.Now);
         InsertEventSorted(activityEvent);
 
         if (await SaveActivitiesAsync())
@@ -145,16 +187,20 @@ public partial class MainPage : ContentPage
     {
         if (sender is Button { CommandParameter: ActivityEvent activityEvent })
         {
-            await AddInstanceAsync(activityEvent, DateTimeOffset.Now);
+            await AddInstanceAsync(activityEvent, DateTimeOffset.Now, string.Empty);
+            ShowEventDetails(activityEvent);
         }
     }
 
-    private async Task<bool> AddInstanceAsync(ActivityEvent activityEvent, DateTimeOffset createdAt)
+    private async Task<bool> AddInstanceAsync(
+        ActivityEvent activityEvent,
+        DateTimeOffset createdAt,
+        string note)
     {
-        var instance = new ActivityInstance { CreatedAt = createdAt };
+        var instance = new ActivityInstance { CreatedAt = createdAt, Note = note };
         instance.UpdateDisplay(DateTimeOffset.Now);
         activityEvent.Instances.Insert(0, instance);
-        activityEvent.UpdateDisplay(DateTimeOffset.Now);
+        activityEvent.UpdateTimeline(DateTimeOffset.Now);
 
         if (await SaveActivitiesAsync())
         {
@@ -163,7 +209,7 @@ public partial class MainPage : ContentPage
         }
 
         activityEvent.Instances.Remove(instance);
-        activityEvent.UpdateDisplay(DateTimeOffset.Now);
+        activityEvent.UpdateTimeline(DateTimeOffset.Now);
         RefreshInstancesView(activityEvent);
         return false;
     }
@@ -266,12 +312,12 @@ public partial class MainPage : ContentPage
         }
 
         activityEvent.Instances.RemoveAt(instanceIndex);
-        activityEvent.UpdateDisplay(DateTimeOffset.Now);
+        activityEvent.UpdateTimeline(DateTimeOffset.Now);
         RefreshInstancesView(activityEvent);
         if (!await SaveActivitiesAsync())
         {
             activityEvent.Instances.Insert(instanceIndex, instance);
-            activityEvent.UpdateDisplay(DateTimeOffset.Now);
+            activityEvent.UpdateTimeline(DateTimeOffset.Now);
             RefreshInstancesView(activityEvent);
         }
     }
@@ -470,14 +516,10 @@ public partial class MainPage : ContentPage
     private void ShowEventDetails(ActivityEvent activityEvent)
     {
         _selectedEvent = activityEvent;
-        var now = DateTimeOffset.Now;
-        activityEvent.UpdateDisplay(now);
-        foreach (var instance in activityEvent.Instances)
-        {
-            instance.UpdateDisplay(now);
-        }
+        activityEvent.UpdateTimeline(DateTimeOffset.Now);
 
         AddEventForm.IsVisible = false;
+        AddInstanceForm.IsVisible = false;
         MainActionButton.IsVisible = true;
         EventsView.IsVisible = false;
         InstancesView.IsVisible = true;
@@ -499,6 +541,7 @@ public partial class MainPage : ContentPage
     {
         _selectedEvent = null;
         AddEventForm.IsVisible = false;
+        AddInstanceForm.IsVisible = false;
         MainActionButton.IsVisible = true;
         EventsView.IsVisible = true;
         InstancesView.IsVisible = false;
@@ -515,6 +558,7 @@ public partial class MainPage : ContentPage
     {
         if (_selectedEvent == activityEvent)
         {
+            activityEvent.UpdateTimeline(DateTimeOffset.Now);
             InstancesView.ItemsSource = activityEvent.Instances
                 .OrderByDescending(instance => instance.CreatedAt)
                 .ToList();
@@ -531,10 +575,7 @@ public partial class MainPage : ContentPage
 
         if (_selectedEvent is { } selectedEvent)
         {
-            foreach (var instance in selectedEvent.Instances)
-            {
-                instance.UpdateDisplay(now);
-            }
+            selectedEvent.UpdateTimeline(now);
         }
     }
 
@@ -545,11 +586,16 @@ public partial class MainPage : ContentPage
         DateLabel.Text = Localization.Get("date");
         TimeLabel.Text = Localization.Get("time");
         ActivityNameEntry.Placeholder = Localization.Get("activity_placeholder");
+        InstanceNoteEntry.Placeholder = Localization.Get("instance_note_placeholder");
         SaveEventButton.Text = Localization.Get("create_event");
+        SaveInstanceButton.Text = Localization.Get("save_instance");
         CancelAddEventButton.Text = Localization.Get("cancel");
+        CancelAddInstanceButton.Text = Localization.Get("cancel");
         EmptyTitleLabel.Text = Localization.Get("empty_title");
         EmptySubtitleLabel.Text = Localization.Get("empty_subtitle");
         EmptyInstancesLabel.Text = Localization.Get("empty_instances");
+        InstanceDateLabel.Text = Localization.Get("date");
+        InstanceTimeLabel.Text = Localization.Get("time");
         SemanticProperties.SetDescription(SettingsButton, Localization.Get("settings_button"));
         UpdateElapsedTimes();
 
@@ -620,6 +666,21 @@ public sealed class ActivityEvent : INotifyPropertyChanged
             : Localization.FormatElapsed(latestInstance.CreatedAt, now);
         AddInstanceText = Localization.Get("add_instance");
     }
+
+    public void UpdateTimeline(DateTimeOffset now)
+    {
+        UpdateDisplay(now);
+        var orderedInstances = Instances
+            .OrderByDescending(instance => instance.CreatedAt)
+            .ToArray();
+
+        for (var index = 0; index < orderedInstances.Length; index++)
+        {
+            var instance = orderedInstances[index];
+            instance.UpdateDisplay(now);
+            instance.HasNextOccurrence = index < orderedInstances.Length - 1;
+        }
+    }
 }
 
 public sealed class ActivityInstance : INotifyPropertyChanged
@@ -627,10 +688,43 @@ public sealed class ActivityInstance : INotifyPropertyChanged
     private string _elapsedText = string.Empty;
     private string _createdAtText = string.Empty;
     private string _deleteText = string.Empty;
+    private string _displayName = string.Empty;
+    private string _timelineText = string.Empty;
+    private bool _hasNextOccurrence;
 
     public Guid Id { get; set; } = Guid.NewGuid();
 
     public DateTimeOffset CreatedAt { get; set; }
+
+    public string Note { get; set; } = string.Empty;
+
+    [JsonIgnore]
+    public string DisplayName
+    {
+        get => _displayName;
+        private set => SetProperty(ref _displayName, value);
+    }
+
+    [JsonIgnore]
+    public string TimelineText
+    {
+        get => _timelineText;
+        private set => SetProperty(ref _timelineText, value);
+    }
+
+    [JsonIgnore]
+    public bool HasNextOccurrence
+    {
+        get => _hasNextOccurrence;
+        set
+        {
+            if (_hasNextOccurrence != value)
+            {
+                _hasNextOccurrence = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasNextOccurrence)));
+            }
+        }
+    }
 
     [JsonIgnore]
     public string ElapsedText
@@ -660,17 +754,22 @@ public sealed class ActivityInstance : INotifyPropertyChanged
         ElapsedText = Localization.FormatElapsed(CreatedAt, now);
         CreatedAtText = CreatedAt.ToLocalTime().ToString("g", Localization.CurrentCulture);
         DeleteText = Localization.Get("delete");
+        DisplayName = string.IsNullOrWhiteSpace(Note)
+            ? Localization.Get("instance_default_title")
+            : Note;
+        TimelineText = Localization.Format("timeline_entry", ElapsedText, CreatedAtText);
     }
 
-    private void SetProperty(ref string property, string value, [System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
+    private bool SetProperty(ref string property, string value, [System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
     {
         if (property == value)
         {
-            return;
+            return false;
         }
 
         property = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        return true;
     }
 }
 
