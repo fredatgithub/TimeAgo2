@@ -6,6 +6,7 @@
     {
       InitializeComponent();
       Localization.Initialize();
+      ThemeManager.Initialize();
     }
 
     protected override Window CreateWindow(IActivationState? activationState)

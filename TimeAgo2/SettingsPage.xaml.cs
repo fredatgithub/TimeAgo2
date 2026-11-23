@@ -6,6 +6,11 @@ public partial class SettingsPage : ContentPage
     {
         InitializeComponent();
         LanguagePicker.ItemsSource = Localization.Languages.Select(language => language.Name).ToList();
+        ThemePicker.ItemsSource = new[]
+        {
+            Localization.Get("theme_light"),
+            Localization.Get("theme_dark")
+        };
         ApplyTranslations();
     }
 
@@ -15,6 +20,7 @@ public partial class SettingsPage : ContentPage
         LanguagePicker.SelectedIndex = Localization.Languages
             .ToList()
             .FindIndex(language => language.Code == Localization.CurrentLanguage);
+        ThemePicker.SelectedIndex = ThemeManager.CurrentTheme == AppTheme.Dark ? 1 : 0;
         ApplyTranslations();
     }
 
@@ -31,6 +37,7 @@ public partial class SettingsPage : ContentPage
         }
 
         Localization.SetLanguage(Localization.Languages[selectedIndex].Code);
+        ThemeManager.SetTheme(ThemePicker.SelectedIndex == 1 ? "dark" : "light");
         ApplyTranslations();
         await Shell.Current.GoToAsync("..");
     }
@@ -47,6 +54,13 @@ public partial class SettingsPage : ContentPage
         PageSubtitleLabel.Text = Localization.Get("settings_subtitle");
         LanguageLabel.Text = Localization.Get("language");
         LanguagePicker.Title = Localization.Get("language");
+        ThemeLabel.Text = Localization.Get("theme");
+        ThemePicker.Title = Localization.Get("theme");
+        ThemePicker.ItemsSource = new[]
+        {
+            Localization.Get("theme_light"),
+            Localization.Get("theme_dark")
+        };
         SaveButton.Text = Localization.Get("save_settings");
         AboutButton.Text = Localization.Get("about");
     }

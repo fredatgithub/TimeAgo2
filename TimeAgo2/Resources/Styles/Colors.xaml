@@ -27,6 +27,18 @@
     <Color x:Key="Gray600">#404040</Color>
     <Color x:Key="Gray900">#212121</Color>
     <Color x:Key="Gray950">#141414</Color>
+    <Color x:Key="PageBackgroundLight">#FFFFFF</Color>
+    <Color x:Key="PageBackgroundDark">#121212</Color>
+    <Color x:Key="SurfaceLight">#FAFAFA</Color>
+    <Color x:Key="SurfaceDark">#1E1E1E</Color>
+    <Color x:Key="TextPrimaryLight">#212121</Color>
+    <Color x:Key="TextPrimaryDark">#F5F5F5</Color>
+    <Color x:Key="TextSecondaryLight">#757575</Color>
+    <Color x:Key="TextSecondaryDark">#BDBDBD</Color>
+    <Color x:Key="DividerLight">#EEEEEE</Color>
+    <Color x:Key="DividerDark">#333333</Color>
+    <Color x:Key="LinkLight">#1976D2</Color>
+    <Color x:Key="LinkDark">#90CAF9</Color>
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>

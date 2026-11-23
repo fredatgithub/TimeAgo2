@@ -3,33 +3,50 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TimeAgo2.SettingsPage"
              Title="Paramètres"
-             BackgroundColor="White">
+             BackgroundColor="{AppThemeBinding Light={StaticResource PageBackgroundLight}, Dark={StaticResource PageBackgroundDark}}">
     <VerticalStackLayout Padding="24,28"
                          Spacing="20">
         <VerticalStackLayout Spacing="6">
             <Label x:Name="PageTitleLabel"
                    Text="Paramètres"
                    FontSize="28"
-                   TextColor="#212121" />
+                   TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
             <Label x:Name="PageSubtitleLabel"
                    Text="Choisissez la langue de l’application."
                    FontSize="15"
-                   TextColor="#757575" />
+                   TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}" />
         </VerticalStackLayout>
 
         <Border Padding="18"
-                BackgroundColor="#FAFAFA"
-                Stroke="#EEEEEE"
+                BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}"
+                Stroke="{AppThemeBinding Light={StaticResource DividerLight}, Dark={StaticResource DividerDark}}"
                 StrokeShape="RoundRectangle 16">
             <VerticalStackLayout Spacing="10">
                 <Label x:Name="LanguageLabel"
                        Text="Langue"
                        FontSize="14"
                        FontAttributes="Bold"
-                       TextColor="#424242" />
+                       TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
                 <Picker x:Name="LanguagePicker"
                         Title="Langue"
-                        TextColor="#212121" />
+                        TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
+            </VerticalStackLayout>
+        </Border>
+
+        <Border x:Name="ThemeBorder"
+                Padding="18"
+                BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}"
+                Stroke="{AppThemeBinding Light={StaticResource DividerLight}, Dark={StaticResource DividerDark}}"
+                StrokeShape="RoundRectangle 16">
+            <VerticalStackLayout Spacing="10">
+                <Label x:Name="ThemeLabel"
+                       Text="Thème"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
+                <Picker x:Name="ThemePicker"
+                        Title="Thème"
+                        TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}" />
             </VerticalStackLayout>
         </Border>
 
@@ -45,8 +62,8 @@
         <Button x:Name="AboutButton"
                 Text="À propos"
                 Clicked="OnAboutClicked"
-                BackgroundColor="#BBDEFB"
-                TextColor="#424242"
+                BackgroundColor="#FF5722"
+                TextColor="{AppThemeBinding Light={StaticResource TextPrimaryLight}, Dark={StaticResource TextPrimaryDark}}"
                 FontAttributes="Bold"
                 CornerRadius="26"
                 HeightRequest="50" />
