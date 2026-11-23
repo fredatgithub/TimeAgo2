@@ -200,7 +200,8 @@
         <CollectionView x:Name="EventsView"
                         Grid.Row="2"
                         Margin="12,0"
-                        SelectionMode="None">
+                        SelectionMode="Single"
+                        SelectionChanged="OnEventSelectionChanged">
             <CollectionView.EmptyView>
                 <VerticalStackLayout Padding="20,48"
                                      Spacing="8"
@@ -226,9 +227,6 @@
                             <VerticalStackLayout Grid.Column="0"
                                                  Spacing="4"
                                                  VerticalOptions="Center">
-                                <VerticalStackLayout.GestureRecognizers>
-                                                          CommandParameter="{Binding .}" />
-                                </VerticalStackLayout.GestureRecognizers>
                                 <Label Text="{Binding Name}"
                                        FontSize="17"
                                        TextColor="#212121"

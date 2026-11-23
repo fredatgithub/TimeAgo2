@@ -214,12 +214,15 @@ public partial class MainPage : ContentPage
         return false;
     }
 
-    private void OnEventTapped(object? sender, TappedEventArgs e)
+    private void OnEventSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (sender is TapGestureRecognizer { CommandParameter: ActivityEvent activityEvent })
+        if (e.CurrentSelection.OfType<ActivityEvent>().FirstOrDefault() is not { } activityEvent)
         {
-            ShowEventDetails(activityEvent);
+            return;
         }
+
+        EventsView.SelectedItem = null;
+        ShowEventDetails(activityEvent);
     }
 
     private void OnBackClicked(object? sender, EventArgs e)
