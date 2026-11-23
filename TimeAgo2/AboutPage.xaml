@@ -51,6 +51,19 @@
                                FontSize="14"
                                TextColor="#757575" />
                     </Grid>
+
+                    <Grid ColumnDefinitions="Auto,*"
+                          ColumnSpacing="8">
+                        <Label x:Name="ContactLabel"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               TextColor="#424242" />
+                        <Label x:Name="ContactValueLabel"
+                               Grid.Column="1"
+                               Text="domaine75@gmail.com"
+                               FontSize="14"
+                               TextColor="#757575" />
+                    </Grid>
                 </VerticalStackLayout>
             </Border>
 

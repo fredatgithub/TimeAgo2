@@ -28,6 +28,7 @@ public partial class AboutPage : ContentPage
         VersionLabel.Text = $@"{Localization.Get("about_version")} :";
         VersionValueLabel.Text = AppInfo.Current.VersionString;
         AuthorLabel.Text = $@"{Localization.Get("about_author")} :";
+        ContactLabel.Text = $@"{Localization.Get("about_contact")} :";
         BackButton.Text = Localization.Get("back_to_settings");
     }
 }
