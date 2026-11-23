@@ -35,6 +35,11 @@ public partial class SettingsPage : ContentPage
         await Shell.Current.GoToAsync("..");
     }
 
+    private async void OnAboutClicked(object? sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(AboutPage));
+    }
+
     private void ApplyTranslations()
     {
         Title = Localization.Get("settings_title");
@@ -43,5 +48,6 @@ public partial class SettingsPage : ContentPage
         LanguageLabel.Text = Localization.Get("language");
         LanguagePicker.Title = Localization.Get("language");
         SaveButton.Text = Localization.Get("save_settings");
+        AboutButton.Text = Localization.Get("about");
     }
 }

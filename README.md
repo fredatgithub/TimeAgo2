@@ -11,6 +11,7 @@ TimeAgo2 est une application .NET MAUI permettant de suivre le temps écoulé de
 - Afficher automatiquement le temps écoulé depuis la dernière occurrence.
 - Supprimer une occurrence ou une activité complète.
 - Choisir entre le français, l'anglais, l'espagnol ou l'allemand.
+- Consulter les informations de l'application depuis la page À propos.
 - Conserver les données localement dans un fichier `activities.json`.
 
 ## Plateformes

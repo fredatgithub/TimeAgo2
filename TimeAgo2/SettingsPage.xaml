@@ -41,5 +41,16 @@
                 FontAttributes="Bold"
                 CornerRadius="26"
                 HeightRequest="50" />
+
+        <Button x:Name="AboutButton"
+                Text="À propos"
+                Clicked="OnAboutClicked"
+                BackgroundColor="Transparent"
+                BorderColor="#DDDDDD"
+                BorderWidth="1"
+                TextColor="#424242"
+                FontAttributes="Bold"
+                CornerRadius="26"
+                HeightRequest="50" />
     </VerticalStackLayout>
 </ContentPage>
