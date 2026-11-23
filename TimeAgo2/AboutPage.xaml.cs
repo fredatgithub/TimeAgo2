@@ -28,9 +28,14 @@ public partial class AboutPage : ContentPage
     VersionLabel.Text = $@"{Localization.Get("about_version")} :";
     VersionValueLabel.Text = AppInfo.Current.VersionString;
     AuthorLabel.Text = $@"{Localization.Get("about_author")} :";
-    ContactLabel.Text = $@"{Localization.Get("about_contact")} :";
+    IssuesLabel.Text = $@"{Localization.Get("about_issues")} :";
     WebsiteLabel.Text = $@"{Localization.Get("about_website")} :";
     BackButton.Text = Localization.Get("back_to_settings");
+  }
+
+  private async void OnIssuesTapped(object? sender, TappedEventArgs e)
+  {
+    await Launcher.Default.OpenAsync("https://github.com/fredatgithub/TimeAgo2/issues");
   }
 
   private async void OnWebsiteTapped(object? sender, TappedEventArgs e)
