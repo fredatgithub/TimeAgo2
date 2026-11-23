@@ -47,7 +47,7 @@
                                TextColor="#424242" />
                         <Label x:Name="AuthorValueLabel"
                                Grid.Column="1"
-                               Text="fred"
+                               Text="Freddy Juhel"
                                FontSize="14"
                                TextColor="#757575" />
                     </Grid>
@@ -60,9 +60,27 @@
                                TextColor="#424242" />
                         <Label x:Name="ContactValueLabel"
                                Grid.Column="1"
-                               Text="domaine75@gmail.com"
+                               Text="domaine75 at gmail dot com"
                                FontSize="14"
                                TextColor="#757575" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="Auto,*"
+                          ColumnSpacing="8">
+                        <Label x:Name="WebsiteLabel"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               TextColor="#424242" />
+                        <Label x:Name="WebsiteValueLabel"
+                               Grid.Column="1"
+                               Text="github.com/fredatgithub/TimeAgo2"
+                               FontSize="14"
+                               TextColor="#1976D2"
+                               TextDecorations="Underline">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnWebsiteTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
                     </Grid>
                 </VerticalStackLayout>
             </Border>
