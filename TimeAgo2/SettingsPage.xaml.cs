@@ -60,7 +60,8 @@ public partial class SettingsPage : ContentPage
     {
             Localization.Get("theme_light"),
             Localization.Get("theme_dark")
-        };
+    };
+
     SaveButton.Text = Localization.Get("save_settings");
     AboutButton.Text = Localization.Get("about");
   }
