@@ -227,7 +227,6 @@
                                                  Spacing="4"
                                                  VerticalOptions="Center">
                                 <VerticalStackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnEventTapped"
                                                           CommandParameter="{Binding .}" />
                                 </VerticalStackLayout.GestureRecognizers>
                                 <Label Text="{Binding Name}"
